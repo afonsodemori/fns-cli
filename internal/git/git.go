@@ -9,6 +9,21 @@ import (
 	"github.com/afonsodemori/fns-cli/internal/config"
 )
 
+type Gist struct {
+	ID    string              `json:"id"`
+	Files map[string]GistFile `json:"files"`
+}
+
+type GistFile struct {
+	Filename string `json:"filename"`
+	Type     string `json:"type"`
+	Language string `json:"language"`
+	RawURL   string `json:"raw_url"`
+	Size     int    `json:"size"`
+	Content  string `json:"content"`
+	Encoding string `json:"encoding"`
+}
+
 func GetCurrentBranch() (string, error) {
 	out, err := exec.Command("git", "branch", "--show-current").Output()
 	if err != nil {
