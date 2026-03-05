@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 
+	"github.com/afonsodemori/fns-cli/cmd/config"
 	"github.com/afonsodemori/fns-cli/cmd/git"
 	"github.com/afonsodemori/fns-cli/cmd/jira"
 	"github.com/spf13/cobra"
@@ -26,4 +27,5 @@ func init() {
 
 	rootCmd.AddCommand(jira.JiraCmd)
 	rootCmd.AddCommand(git.GitCmd)
+	rootCmd.AddCommand(config.ConfigCmd)
 }

@@ -20,6 +20,12 @@ type Config struct {
 		UserID     int    `json:"user_id"`
 		Token      string `json:"token"`
 	} `json:"gitlab"`
+
+	Extras []struct {
+		Type  string `json:"type"`
+		ID    string `json:"id"`
+		Token string `json:"token"`
+	} `json:"extras"`
 }
 
 func Load() (*Config, error) {
