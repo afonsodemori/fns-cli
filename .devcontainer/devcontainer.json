@@ -5,8 +5,14 @@
   "workspaceFolder": "/app",
 
   "mounts": [
+    // cli
+    "source=${localEnv:HOME}/.fns-cli/container.bash_profile,target=/home/vscode/fns-cli.bash_profile,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.bash_history,target=/home/vscode/.bash_history,type=bind,consistency=cached",
+    // devtools
     "source=gemini,target=/home/vscode/.gemini,type=volume",
-    "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
+    // source code
+    "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.fns-cli/config.json,target=/app/config.json,type=bind,consistency=cached"
   ],
 
   "features": {

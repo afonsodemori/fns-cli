@@ -3,10 +3,10 @@ APP_DIR = $(HOME)/.fns-cli
 
 install: COMPLETION_PATH = $(APP_DIR)/bash_completion.sh
 install:
+	@mkdir -p $(APP_DIR)
 	@GOOS=linux GOARCH=arm64 go build -o bin/fns-cli-linux-arm64
 	@sudo ln -sf /app/config.json $(APP_DIR)/config.json
 	@sudo ln -sf /app/bin/fns-cli-linux-arm64 /usr/local/bin/fns-cli
-	@mkdir -p $(APP_DIR)
 	@fns-cli completion bash > $(COMPLETION_PATH)
 	@chmod +x $(COMPLETION_PATH)
 	@echo 'Binary generated at `/app/bin/fns-cli`.'
