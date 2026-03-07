@@ -1,9 +1,13 @@
-# fns-cli
+<p align="center">
+  <img alt="logo: fns-cli" src="https://fns-cli.afonso.dev/assets/logo-banner-transparent.png">
+</p>
 
 `fns-cli` is a Go-based CLI tool designed to assist with daily developer tasks, specifically focusing on integrations with **Jira** and **GitLab**. It provides a command-line interface for managing issues, pipelines, and git-related workflows.
 
 > [!NOTE]
 > **Work in Progress:** This project is currently being migrated from a legacy version that I developed and use. While the command structures are visible, the underlying implementations are still under development.
+
+Learn more: https://fns-cli.afonso.dev
 
 ---
 
@@ -30,27 +34,14 @@
 
 ## Installation
 
-```bash
+```sh
+curl -fsSL https://fns-cli.afonso.dev/install.sh | sh
+```
+
+or
+
+```sh
 go install github.com/afonsodemori/fns-cli@latest
 ```
 
-## Config
-
-`$HOME/.fns-cli/config.json`
-
-```json
-{
-  "gitlab": {
-    "api_base_url": "https://gitlab.com/api/v4",
-    "user_id": 1,
-    "token": "aHR0cHM6Ly95b3V0dS5iZS9vYXZNdFVXREJUTQ==",
-    "default_project_key": "FCLI"
-  },
-
-  "jira": {
-    "web_base_url": "https://company.atlassian.net",
-    "api_base_url": "https://company.atlassian.net/rest/api/3",
-    "token": "aHR0cHM6Ly95b3V0dS5iZS9vYXZNdFVXREJUTQ=="
-  }
-}
-```
+Configuration instructions at https://fns-cli.afonso.dev/guide/getting-started.html
