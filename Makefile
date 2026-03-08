@@ -1,18 +1,29 @@
 HOME_DIR = $(HOME)
-APP_DIR = $(HOME)/.fns-cli
+APP_DIR  = $(HOME)/.fns-cli
+BINARY_PATH = dist/fns-cli_linux_arm64_v8.0/fns-cli
 
-install: COMPLETION_PATH = $(APP_DIR)/bash_completion.sh
-install:
+dev:
+	@echo "Building development binary..."
+	@GOOS=linux GOARCH=arm64 go build -o $(BINARY_PATH)
+	@$(BINARY_PATH) version
+
+build:
+	@echo "Building snapshot with GoReleaser..."
+	@goreleaser build --clean --snapshot
+	@echo
+	@$(BINARY_PATH) version
+
+setup: build
+	@echo "\nConfiguring application directory and symlinks..."
 	@mkdir -p $(APP_DIR)
-	@GOOS=linux GOARCH=arm64 go build -o bin/fns-cli-linux-arm64
-	@sudo ln -sf /app/config.json $(APP_DIR)/config.json
-	@sudo ln -sf /app/bin/fns-cli-linux-arm64 /usr/local/bin/fns-cli
-	@fns-cli completion bash > $(COMPLETION_PATH)
-	@chmod +x $(COMPLETION_PATH)
-	@echo 'Binary generated at `/app/bin/fns-cli`.'
-	@echo 'To update completion, run:'
-	@echo 'source $(COMPLETION_PATH)'
+	@ln -sf /app/config.json $(APP_DIR)/config.json
+	@sudo ln -sf $(PWD)/$(BINARY_PATH) /usr/local/bin/fns-cli
+	@echo
+	@$(MAKE) --no-print-directory completion
+	@echo "\nSetup complete."
 
-build-darwin:
-	@GOOS=darwin GOARCH=arm64 go build -o bin/fns-cli-darwin-arm64
-	@echo 'Binary generated at `/app/bin/fns-cli-darwin-arm64`.'
+completion:
+	@echo "Generating bash completions..."
+	@fns-cli completion bash > $(APP_DIR)/bash_completion.sh
+	@chmod +x $(APP_DIR)/bash_completion.sh
+	@echo "Run 'source $(APP_DIR)/bash_completion.sh' to enable completion."
