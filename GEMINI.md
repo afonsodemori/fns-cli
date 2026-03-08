@@ -80,7 +80,11 @@ Centralized error handling is provided in `internal/ui/output.go`. Use `ui.Handl
 
 ### UI Styling
 
-Use **Lipgloss** for all terminal output styling to maintain consistency. Styles should be defined or used within the `internal/ui` package or locally in commands for specific needs.
+- Use **charmbracelet/huh** for forms and prompts in the terminal.
+- Use **charmbracelet/lipgloss** for all terminal output styling.
+- Styles should be defined or used within the `internal/ui` package or locally in commands for specific needs.
+- Avoid `fmt.Printf` for styled output; use `style.Render()` to ensure clean terminal state management.
+- Prefer `RunE` in Cobra commands when using `huh` to properly bubble up cancellation/errors (Define "SilenceUsage: true")
 
 ### Configuration Access
 
