@@ -7,6 +7,10 @@ before:
 builds:
   - env:
       - CGO_ENABLED=0
+    ldflags:
+      - -X github.com/afonsodemori/fns-cli/cmd.version={{.Version}}
+      - -X github.com/afonsodemori/fns-cli/cmd.commit={{.ShortCommit}}
+      - -X github.com/afonsodemori/fns-cli/cmd.date={{.CommitDate}}
     goos:
       - linux
       - windows
