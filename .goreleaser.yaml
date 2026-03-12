@@ -21,16 +21,28 @@ builds:
 
 archives:
   - formats: [tar.gz]
-    name_template: >-
-      {{ .ProjectName }}_
-      {{- .Os }}_
-      {{- if eq .Arch "amd64" }}x86_64
-      {{- else if eq .Arch "386" }}i386
-      {{- else }}{{ .Arch }}{{ end }}
-      {{- if .Arm }}v{{ .Arm }}{{ end }}
     format_overrides:
       - goos: windows
         formats: [zip]
+
+homebrew_casks:
+  - name: fns-cli
+    description: 'Streamline your dev workflow from the terminal.'
+    homepage: 'https://github.com/afonsodemori/fns-cli'
+    repository:
+      owner: afonsodemori
+      name: homebrew-tap
+      token: '{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}'
+    directory: Casks
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/fns-cli"]
+          end
+    caveats: |
+      To get started with fns-cli, run:
+        fns-cli --help
 
 changelog:
   sort: asc
