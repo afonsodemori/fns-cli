@@ -11,14 +11,8 @@
     // devtools
     "source=gemini,target=/home/vscode/.gemini,type=volume",
     // source code
-    "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
-    "source=${localEnv:HOME}/.fns-cli/config.json,target=/app/config.json,type=bind,consistency=cached"
+    "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
   ],
-
-  "features": {
-    "ghcr.io/devcontainers/features/go:1": { "version": "1.25.7" },
-    "ghcr.io/devcontainers/features/node:1": { "version": "24" }
-  },
 
   "customizations": {
     "vscode": {
