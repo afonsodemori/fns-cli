@@ -1,4 +1,4 @@
 services:
   app:
-    image: ghcr.io/afonsodemori/devcontainers/golang:1.26
+    build: .
     command: sleep infinity

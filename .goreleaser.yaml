@@ -44,6 +44,17 @@ homebrew_casks:
       To get started with fns-cli, run:
         fns-cli --help
 
+nfpms:
+  - maintainer: 'Afonso de Mori <me@afonso.dev>'
+    description: 'Streamline your dev workflow from the terminal.'
+    homepage: 'https://fns-cli.afonso.dev'
+    license: MIT
+    formats:
+      - apk
+      - deb
+      - rpm
+    bindir: /usr/bin
+
 changelog:
   sort: asc
   filters:
