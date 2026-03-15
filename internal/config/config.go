@@ -11,6 +11,7 @@ type Config struct {
 	Jira struct {
 		WebBaseURL        string `json:"web_base_url"`
 		APIBaseURL        string `json:"api_base_url"`
+		Email             string `json:"email"`
 		Token             string `json:"token"`
 		DefaultProjectKey string `json:"default_project_key"`
 	} `json:"jira"`
