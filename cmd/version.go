@@ -36,7 +36,7 @@ var versionCmd = &cobra.Command{
 		s, err := state.Load()
 		if err == nil && s.LatestVersion != "" {
 			if ver.IsNewer(s.LatestVersion, version) {
-				fmt.Printf("\nNew version found: %s\n", s.LatestVersion)
+				fmt.Printf("\n✨ Update available: %s\n", s.LatestVersion)
 				fmt.Println("Run 'fns-cli update' to install it.")
 			}
 

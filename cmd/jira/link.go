@@ -2,10 +2,10 @@ package jira
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/afonsodemori/fns-cli/internal/config"
 	"github.com/afonsodemori/fns-cli/internal/git"
+	"github.com/afonsodemori/fns-cli/internal/jira"
 	"github.com/afonsodemori/fns-cli/internal/ui"
 	"github.com/spf13/cobra"
 )
@@ -37,14 +37,10 @@ var linkCmd = &cobra.Command{
 			ui.HandleError(err)
 		}
 
-		fmt.Println(getJiraLink(cfg, parsedKey))
+		fmt.Println(jira.GetIssueURL(cfg, parsedKey))
 	},
 }
 
 func init() {
 	JiraCmd.AddCommand(linkCmd)
-}
-
-func getJiraLink(config *config.Config, issueKey string) string {
-	return fmt.Sprintf("%s/browse/%s", config.Jira.WebBaseURL, strings.ToUpper(issueKey))
 }

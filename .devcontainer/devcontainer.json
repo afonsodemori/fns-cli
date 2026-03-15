@@ -16,7 +16,14 @@
 
   "customizations": {
     "vscode": {
-      "extensions": ["golang.go", "EditorConfig.EditorConfig", "esbenp.prettier-vscode", "mkhl.shfmt"]
+      "extensions": [
+        "golang.go",
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "mkhl.shfmt",
+        "eamodio.gitlens",
+        "github.vscode-github-actions"
+      ]
     }
   },
 

@@ -16,6 +16,7 @@ var importExtrasCmd = &cobra.Command{
 	Use:   "import-extras",
 	Short: "Import extra configs (from gist)",
 	Run: func(cmd *cobra.Command, args []string) {
+		// TODO: After install, check if imports are in .bashrc, suggest adding it there, if not present yet.
 		cfg, err := config.Load()
 		if err != nil {
 			ui.HandleError(err)
