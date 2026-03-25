@@ -33,9 +33,9 @@ jobs:
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
 
       - name: Trigger Repository Update
-        uses: peter-evans/repository-dispatch@v4
-        with:
-          token: ${{ secrets.PAT_FOR_PKG_PUSH }}
-          repository: afonsodemori/packages
-          event-type: new-release
-          client-payload: '{"version": "${{ github.ref_name }}"}'
+        run: |
+          curl --request POST \
+               --form token=${{ secrets.GITLAB_TRIGGER_TOKEN }} \
+               --form ref=main \
+               --form "variables[VERSION]=${{ github.ref_name }}" \
+               "https://gitlab.com/api/v4/projects/afonsodemori%2Fpackages/trigger/pipeline"
