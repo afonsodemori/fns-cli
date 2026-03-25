@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/afonsodemori/fns-cli/internal/config"
@@ -25,9 +26,8 @@ func (c *JiraClient) httpClient() *http.Client {
 	}
 }
 
-func (c *JiraClient) GetIssue(issueKey string) (*Issue, error) {
-	url := fmt.Sprintf("%s/issue/%s", c.cfg.Jira.APIBaseURL, issueKey)
-	req, err := http.NewRequest("GET", url, nil)
+func (c *JiraClient) newRequest(method, url string, body io.Reader) (*http.Request, error) {
+	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, err
 	}
@@ -41,6 +41,16 @@ func (c *JiraClient) GetIssue(issueKey string) (*Issue, error) {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", "fns-cli/0.0.1 (+https://afonso.dev/fns-cli)")
+
+	return req, nil
+}
+
+func (c *JiraClient) GetIssue(issueKey string) (*Issue, error) {
+	url := fmt.Sprintf("%s/issue/%s", c.cfg.Jira.APIBaseURL, issueKey)
+	req, err := c.newRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := c.httpClient().Do(req)
 	if err != nil {
@@ -122,4 +132,63 @@ func (c *JiraClient) GetIssue(issueKey string) (*Issue, error) {
 	}
 
 	return issue, nil
+}
+
+func (c *JiraClient) FindAssignableUsers(issueKey string) ([]User, error) {
+	url := fmt.Sprintf("%s/user/assignable/search?issueKey=%s&maxResults=500&recommend=true", c.cfg.Jira.APIBaseURL, issueKey)
+	req, err := c.newRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.httpClient().Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("Jira API error (%d): %s", resp.StatusCode, string(body))
+	}
+
+	var users []User
+	if err := json.NewDecoder(resp.Body).Decode(&users); err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
+
+func (c *JiraClient) AssignIssue(issueKey string, user *User) error {
+	url := fmt.Sprintf("%s/issue/%s/assignee", c.cfg.Jira.APIBaseURL, issueKey)
+
+	payload := struct {
+		AccountID string `json:"accountId"`
+	}{
+		AccountID: user.AccountID,
+	}
+
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	req, err := c.newRequest("PUT", url, strings.NewReader(string(body)))
+	if err != nil {
+		return err
+	}
+
+	resp, err := c.httpClient().Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusNoContent && resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("Jira API error (%d): %s", resp.StatusCode, string(body))
+	}
+
+	return nil
 }

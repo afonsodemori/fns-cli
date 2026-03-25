@@ -8,14 +8,8 @@ import (
 )
 
 type User struct {
+	AccountID   string `json:"accountId"`
 	DisplayName string `json:"displayName"`
-	Email       string `json:"emailAddress"`
-}
-
-type Comment struct {
-	Author User   `json:"author"`
-	Body   string `json:"body"`
-	// Created time.Time `json:"created"`
 }
 
 type Issue struct {
@@ -31,10 +25,9 @@ type Issue struct {
 	Reporter    User      `json:"reporter"`
 	Assignee    *User     `json:"assignee"`
 	Sprints     []string  `json:"sprints"`
-	Comments    []Comment `json:"comments"`
 	TimeSpent   string    `json:"timeSpent"`
 	Creator     User      `json:"creator"`
-	// Created     time.Time `json:"created"`
+	// Created     time.Time `json:"created"` TODO: Check conversion issue
 	// Updated     time.Time `json:"updated"`
 }
 
