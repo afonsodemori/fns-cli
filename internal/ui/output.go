@@ -60,3 +60,16 @@ func Select[T comparable](title string, options []huh.Option[T]) (T, error) {
 
 	return result, err
 }
+
+func Confirm(title string) (bool, error) {
+	// TODO: Use Select yes/no instead?
+	var result bool
+
+	err := huh.NewConfirm().
+		Title(title).
+		Value(&result).
+		WithTheme(huh.ThemeBase16()).
+		Run()
+
+	return result, err
+}

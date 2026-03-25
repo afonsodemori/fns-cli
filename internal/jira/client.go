@@ -192,3 +192,71 @@ func (c *JiraClient) AssignIssue(issueKey string, user *User) error {
 
 	return nil
 }
+
+func (c *JiraClient) GetTransitions(issueKey string) ([]Transition, error) {
+	url := fmt.Sprintf("%s/issue/%s/transitions", c.cfg.Jira.APIBaseURL, issueKey)
+	req, err := c.newRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.httpClient().Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("Jira API error (%d): %s", resp.StatusCode, string(body))
+	}
+
+	var apiResponse struct {
+		Transitions []Transition `json:"transitions"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&apiResponse); err != nil {
+		return nil, err
+	}
+
+	return apiResponse.Transitions, nil
+}
+
+func (c *JiraClient) DoTransition(issueKey string, transition Transition) error {
+	url := fmt.Sprintf("%s/issue/%s/transitions", c.cfg.Jira.APIBaseURL, issueKey)
+
+	payload := struct {
+		Transition struct {
+			ID string `json:"id"`
+		} `json:"transition"`
+	}{
+		Transition: struct {
+			ID string `json:"id"`
+		}{
+			ID: transition.ID,
+		},
+	}
+
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	req, err := c.newRequest("POST", url, strings.NewReader(string(body)))
+	if err != nil {
+		return err
+	}
+
+	resp, err := c.httpClient().Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusNoContent && resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("Jira API error (%d): %s", resp.StatusCode, string(body))
+	}
+
+	return nil
+}

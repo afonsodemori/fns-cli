@@ -13,22 +13,29 @@ type User struct {
 }
 
 type Issue struct {
-	ID          string    `json:"id"`
-	Key         string    `json:"key"`
-	Summary     string    `json:"summary"`
-	Description string    `json:"description"`
-	Type        string    `json:"type"`
-	Project     string    `json:"project"`
-	Attachments []string  `json:"attachments"`
-	Status      string    `json:"status"`
-	Priority    string    `json:"priority"`
-	Reporter    User      `json:"reporter"`
-	Assignee    *User     `json:"assignee"`
-	Sprints     []string  `json:"sprints"`
-	TimeSpent   string    `json:"timeSpent"`
-	Creator     User      `json:"creator"`
+	ID          string   `json:"id"`
+	Key         string   `json:"key"`
+	Summary     string   `json:"summary"`
+	Description string   `json:"description"`
+	Type        string   `json:"type"`
+	Project     string   `json:"project"`
+	Attachments []string `json:"attachments"`
+	Status      string   `json:"status"`
+	Priority    string   `json:"priority"`
+	Reporter    User     `json:"reporter"`
+	Assignee    *User    `json:"assignee"`
+	Sprints     []string `json:"sprints"`
+	TimeSpent   string   `json:"timeSpent"`
+	Creator     User     `json:"creator"`
 	// Created     time.Time `json:"created"` TODO: Check conversion issue
 	// Updated     time.Time `json:"updated"`
+}
+
+type Transition struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	HasScreen   bool   `json:"hasScreen"`
+	IsAvailable bool   `json:"isAvailable"`
 }
 
 func GetIssueURL(cfg *config.Config, issueKey string) string {
