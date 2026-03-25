@@ -71,11 +71,12 @@ func displayIssue(cfg *config.Config, issue *jira.Issue, short bool) {
 
 	colorCode, ok := statusColors[issue.Status]
 	if !ok {
+		// TODO: Look for status category
 		colorCode = "12" // Default Blue
 	}
 
 	statusStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("0")).
+		Foreground(lipgloss.Color("#FFFFFF")).
 		Background(lipgloss.Color(colorCode)).
 		Padding(0, 1)
 
@@ -84,7 +85,7 @@ func displayIssue(cfg *config.Config, issue *jira.Issue, short bool) {
 		Italic(true)
 
 	summaryStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("0")).
+		Foreground(lipgloss.Color("#FFFFFF")).
 		Background(lipgloss.Color(colorCode)).
 		Bold(true).
 		Padding(0, 1)

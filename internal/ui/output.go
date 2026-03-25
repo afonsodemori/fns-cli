@@ -20,7 +20,7 @@ func HandleError(err error) {
 
 func Warn(msg string) {
 	labelStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("0")).
+		Foreground(lipgloss.Color("#FFFFFF")).
 		Background(lipgloss.Color("11")).
 		Padding(0, 1)
 
@@ -35,7 +35,7 @@ func Warn(msg string) {
 
 func Info(msg string) {
 	labelStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("0")).
+		Foreground(lipgloss.Color("#FFFFFF")).
 		Background(lipgloss.Color("12")).
 		Padding(0, 1)
 
