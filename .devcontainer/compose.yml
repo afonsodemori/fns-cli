@@ -2,3 +2,5 @@ services:
   app:
     build: .
     command: sleep infinity
+    extra_hosts:
+      - 'mock-api:127.0.0.1'

@@ -14,6 +14,9 @@ dev:
 	@$(MAKE) --no-print-directory completion
 	@$(BINARY_PATH) version
 
+mock-api:
+	mockoon-cli start --data=mocks/external-api.json --port=3000
+
 build-snapshot:
 	@mkdir -p $(APP_DIR)
 # 	Build snapshot

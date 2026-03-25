@@ -1,0 +1,263 @@
+{
+  "uuid": "89365f5a-0257-45ef-9ac1-f478ff016c9d",
+  "lastMigration": 33,
+  "name": "FCLI - External APIs",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3008,
+  "hostname": "",
+  "folders": [
+    {
+      "uuid": "e91650e1-99e2-4afd-b2d7-6fa6013a13f2",
+      "name": "jira",
+      "children": [
+        {
+          "type": "route",
+          "uuid": "a9de8511-7d57-428a-8a73-fde885f57b03"
+        },
+        {
+          "type": "route",
+          "uuid": "a9d12b7e-b926-45cd-ba52-a1d1821a097a"
+        },
+        {
+          "type": "route",
+          "uuid": "0e747248-246d-4abc-a168-4f0a0785540a"
+        },
+        {
+          "type": "route",
+          "uuid": "10a34e6f-2a95-433a-b4b9-656703417cd6"
+        },
+        {
+          "type": "route",
+          "uuid": "910b7d73-3134-474a-a058-8ff2e14adae2"
+        }
+      ]
+    },
+    {
+      "uuid": "fc6164ad-4579-4b05-93cb-7739b1d9abfd",
+      "name": "gitlab",
+      "children": []
+    },
+    {
+      "uuid": "6725b563-a574-4bab-b104-66ed6c21d3eb",
+      "name": "notion",
+      "children": []
+    }
+  ],
+  "routes": [
+    {
+      "uuid": "a9de8511-7d57-428a-8a73-fde885f57b03",
+      "type": "http",
+      "documentation": "Get issue",
+      "method": "get",
+      "endpoint": "jira/issue/:issue_key",
+      "responses": [
+        {
+          "uuid": "6d595905-ce18-476d-a40d-7a288bfd87e0",
+          "body": "{\n  \"key\": \"{{urlParam 'issue_key'}}\",\n  \"fields\": {\n    \"summary\": \"MOCK: {{faker 'lorem.sentence'}}\",\n    \"status\": {\n      \"name\": \"{{oneOf (array 'Backlog' 'Blocked' 'has dependency' 'In Progress' 'Code Review' 'Functional Test' 'Prepare Release' 'Ready for release' 'Done')}}\",\n      \"statusCategory\": {\n        \"name\": \"{{oneOf (array 'To Do' 'In Progress' 'Done')}}\"\n      }\n    },\n    \"assignee\": {\n      \"displayName\": \"{{faker 'person.fullName'}}\",\n      \"accountId\": \"{{faker 'string.uuid'}}\"\n    },\n    \"creator\": {\n      \"displayName\": \"{{faker 'person.fullName'}}\",\n      \"accountId\": \"{{faker 'string.uuid'}}\"\n    },\n    \"reporter\": {\n      \"displayName\": \"{{faker 'person.fullName'}}\",\n      \"accountId\": \"{{faker 'string.uuid'}}\"\n    },\n    \"issuetype\": {\n      \"name\": \"{{oneOf (array 'Task' 'Bug' 'Sub-task' 'Epic')}}\",\n      \"subtask\": false\n    },\n    \"created\": \"2026-03-20T15:03:51.031+0200\",\n    \"updated\": \"2026-03-23T11:03:15.778+0200\"\n  }\n}",
+          "latency": 200,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "a9d12b7e-b926-45cd-ba52-a1d1821a097a",
+      "type": "http",
+      "documentation": "Get transitions",
+      "method": "get",
+      "endpoint": "jira/issue/:issue_key/transitions",
+      "responses": [
+        {
+          "uuid": "34e0fafc-6ae8-4229-8eea-69e13de6898c",
+          "body": "{\n  \"transitions\": [\n    {\n      \"id\": \"11\",\n      \"name\": \"Backlog\",\n      \"to\": {\n        \"name\": \"Backlog\",\n        \"id\": \"10100\",\n        \"statusCategory\": {\n          \"id\": 2,\n          \"key\": \"new\",\n          \"name\": \"To Do\"\n        }\n      }\n    },\n    {\n      \"id\": \"21\",\n      \"name\": \"Selected for Development\",\n      \"to\": {\n        \"name\": \"Selected for Development\",\n        \"id\": \"10101\",\n        \"statusCategory\": {\n          \"id\": 2,\n          \"key\": \"new\",\n          \"name\": \"To Do\"\n        }\n      }\n    },\n    {\n      \"id\": \"31\",\n      \"name\": \"In Progress\",\n      \"to\": {\n        \"name\": \"In Progress\",\n        \"id\": \"3\",\n        \"statusCategory\": {\n          \"id\": 4,\n          \"key\": \"indeterminate\",\n          \"name\": \"In Progress\"\n        }\n      }\n    },\n    {\n      \"id\": \"41\",\n      \"name\": \"Done\",\n      \"to\": {\n        \"name\": \"Done\",\n        \"id\": \"10001\",\n        \"statusCategory\": {\n          \"id\": 3,\n          \"key\": \"done\",\n          \"colorName\": \"green\",\n          \"name\": \"Done\"\n        }\n      },\n      \"hasScreen\": true\n    },\n    {\n      \"id\": \"71\",\n      \"name\": \"Functional Test\",\n      \"to\": {\n        \"name\": \"Functional Test\",\n        \"id\": \"10604\",\n        \"statusCategory\": {\n          \"id\": 4,\n          \"key\": \"indeterminate\",\n          \"name\": \"In Progress\"\n        }\n      }\n    },\n    {\n      \"id\": \"81\",\n      \"name\": \"Code Review\",\n      \"to\": {\n        \"name\": \"Code Review\",\n        \"id\": \"10605\",\n        \"statusCategory\": {\n          \"id\": 4,\n          \"key\": \"indeterminate\",\n          \"name\": \"In Progress\"\n        }\n      }\n    },\n    {\n      \"id\": \"91\",\n      \"name\": \"Ready for release\",\n      \"to\": {\n        \"name\": \"Ready for release\",\n        \"id\": \"10705\",\n        \"statusCategory\": {\n          \"id\": 4,\n          \"key\": \"indeterminate\",\n          \"name\": \"In Progress\"\n        }\n      }\n    },\n    {\n      \"id\": \"101\",\n      \"name\": \"Prepare Release\",\n      \"to\": {\n        \"name\": \"Prepare Release\",\n        \"id\": \"10710\",\n        \"statusCategory\": {\n          \"id\": 4,\n          \"key\": \"indeterminate\",\n          \"name\": \"In Progress\"\n        }\n      }\n    },\n    {\n      \"id\": \"111\",\n      \"name\": \"Blocked\",\n      \"to\": {\n        \"name\": \"Blocked\",\n        \"id\": \"10706\",\n        \"statusCategory\": {\n          \"id\": 2,\n          \"key\": \"new\",\n          \"name\": \"To Do\"\n        }\n      }\n    },\n    {\n      \"id\": \"121\",\n      \"name\": \"has dependency\",\n      \"to\": {\n        \"name\": \"has dependency\",\n        \"id\": \"10939\",\n        \"statusCategory\": {\n          \"id\": 4,\n          \"key\": \"indeterminate\",\n          \"name\": \"In Progress\"\n        }\n      }\n    }\n  ]\n}",
+          "latency": 200,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "10a34e6f-2a95-433a-b4b9-656703417cd6",
+      "type": "http",
+      "documentation": "Finds users assignable to issues",
+      "method": "get",
+      "endpoint": "jira/user/assignable/search",
+      "responses": [
+        {
+          "uuid": "e0ae8f80-d95e-45e7-9744-3a8d9f7292b4",
+          "body": "[\n  {{#repeat 20}}\n  {\n    \"accountId\": \"{{faker 'string.uuid'}}\",\n    \"displayName\": \"{{faker 'person.fullName'}}\"\n  }\n  {{/repeat}}\n]",
+          "latency": 200,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "910b7d73-3134-474a-a058-8ff2e14adae2",
+      "type": "http",
+      "documentation": "Assign issue",
+      "method": "put",
+      "endpoint": "jira/issue/:issue_key/assignee",
+      "responses": [
+        {
+          "uuid": "575f9fb9-d674-4356-a5cc-2807f9aa3f00",
+          "body": "",
+          "latency": 400,
+          "statusCode": 204,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "0e747248-246d-4abc-a168-4f0a0785540a",
+      "type": "http",
+      "documentation": "Transition issue",
+      "method": "post",
+      "endpoint": "jira/issue/:issue_key/transitions",
+      "responses": [
+        {
+          "uuid": "17ed164d-dd67-40cb-a066-1712e369a551",
+          "body": "",
+          "latency": 400,
+          "statusCode": 204,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "folder",
+      "uuid": "e91650e1-99e2-4afd-b2d7-6fa6013a13f2"
+    },
+    {
+      "type": "folder",
+      "uuid": "fc6164ad-4579-4b05-93cb-7739b1d9abfd"
+    },
+    {
+      "type": "folder",
+      "uuid": "6725b563-a574-4bab-b104-66ed6c21d3eb"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}

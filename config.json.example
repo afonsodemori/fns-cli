@@ -1,6 +1,6 @@
 {
   "gitlab": {
-    "api_base_url": "https://gitlab.com/api/v4",
+    "api_base_url": "http://mock-api:3000/gitlab",
     "user_id": 1,
     "token": "aHR0cHM6Ly95b3V0dS5iZS9vYXZNdFVXREJUTQ==",
     "default_project_key": "FCLI"
@@ -8,7 +8,7 @@
 
   "jira": {
     "web_base_url": "https://company.atlassian.net",
-    "api_base_url": "https://company.atlassian.net/rest/api/3",
+    "api_base_url": "http://mock-api:3000/jira",
     "token": "aHR0cHM6Ly95b3V0dS5iZS9vYXZNdFVXREJUTQ=="
   }
 }
