@@ -32,6 +32,29 @@ func GetCurrentBranch() (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
+func GetRemoteURL() (string, error) {
+	out, err := exec.Command("git", "remote", "get-url", "origin").Output()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(out)), nil
+}
+
+func GetGitLabProjectNamespace() (string, error) {
+	remoteURL, err := GetRemoteURL()
+	if err != nil {
+		return "", err
+	}
+
+	re := regexp.MustCompile(`(?:git@gitlab\.com:|https://gitlab\.com/)(.*)\.git`)
+	matches := re.FindStringSubmatch(remoteURL)
+	if len(matches) < 2 {
+		return "", fmt.Errorf("Can't find namespace for this repository: %s", remoteURL)
+	}
+
+	return matches[1], nil
+}
+
 // TODO: Probably not here
 func ParseIssueKey(param string) (string, error) {
 	cfg, err := config.Load()
