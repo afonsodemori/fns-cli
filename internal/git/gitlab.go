@@ -18,3 +18,8 @@ type Pipeline struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+type MergeRequest struct {
+	ID    int    `json:"id"`
+	State string `json:"state"`
+}
