@@ -32,6 +32,16 @@ func GetCurrentBranch() (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
+func GetLocalBranches() ([]string, error) {
+	out, err := exec.Command("git", "branch", "--format=%(refname:short)").Output()
+	if err != nil {
+		return nil, err
+	}
+
+	branches := strings.Split(strings.TrimSpace(string(out)), "\n")
+	return branches, nil
+}
+
 func GetRemoteURL() (string, error) {
 	out, err := exec.Command("git", "remote", "get-url", "origin").Output()
 	if err != nil {

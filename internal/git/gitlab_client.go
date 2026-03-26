@@ -94,6 +94,32 @@ func (c *GitLabClient) GetPipelines(projectID int, branch string) ([]Pipeline, e
 	return pipelines, nil
 }
 
+func (c *GitLabClient) GetMergeRequests(namespace, sourceBranch string) ([]MergeRequest, error) {
+	endpoint := fmt.Sprintf("projects/%s/merge_requests?source_branch=%s", url.PathEscape(namespace), url.QueryEscape(sourceBranch))
+	req, err := c.newRequest("GET", endpoint, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.httpClient().Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("GitLab API error (%d): %s", resp.StatusCode, string(body))
+	}
+
+	var mrs []MergeRequest
+	if err := json.NewDecoder(resp.Body).Decode(&mrs); err != nil {
+		return nil, err
+	}
+
+	return mrs, nil
+}
+
 type ProjectMap struct {
 	Namespaces map[string]int `json:"map"`
 }
