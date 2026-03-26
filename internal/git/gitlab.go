@@ -20,6 +20,16 @@ type Pipeline struct {
 }
 
 type MergeRequest struct {
-	ID    int    `json:"id"`
-	State string `json:"state"`
+	ID           int    `json:"id"`
+	IID          int    `json:"iid"`
+	ProjectID    int    `json:"project_id"`
+	Title        string `json:"title"`
+	Description  string `json:"description"`
+	State        string `json:"state"`
+	WebURL       string `json:"web_url"`
+	SourceBranch string `json:"source_branch"`
+	TargetBranch string `json:"target_branch"`
+	References   struct {
+		Full string `json:"full"`
+	} `json:"references"`
 }

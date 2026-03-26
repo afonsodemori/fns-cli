@@ -42,6 +42,41 @@ func GetLocalBranches() ([]string, error) {
 	return branches, nil
 }
 
+func GetRemoteBranches() ([]string, error) {
+	out, err := exec.Command("git", "branch", "-r", "--format=%(refname:short)").Output()
+	if err != nil {
+		return nil, err
+	}
+
+	branches := strings.Split(strings.TrimSpace(string(out)), "\n")
+	return branches, nil
+}
+
+func GetDevelopmentBranch() (string, error) {
+	remoteBranches, err := GetRemoteBranches()
+	if err != nil {
+		return "", err
+	}
+
+	for _, branch := range remoteBranches {
+		if branch == "origin/develop" {
+			return "develop", nil
+		}
+	}
+	for _, branch := range remoteBranches {
+		if branch == "origin/main" {
+			return "main", nil
+		}
+	}
+	for _, branch := range remoteBranches {
+		if branch == "origin/master" {
+			return "master", nil
+		}
+	}
+
+	return "", fmt.Errorf("couldn't find branches develop/main/master remotely")
+}
+
 func GetRemoteURL() (string, error) {
 	out, err := exec.Command("git", "remote", "get-url", "origin").Output()
 	if err != nil {
