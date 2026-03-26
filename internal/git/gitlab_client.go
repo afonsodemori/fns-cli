@@ -1,6 +1,7 @@
 package git
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -92,6 +93,37 @@ func (c *GitLabClient) GetPipelines(projectID int, branch string) ([]Pipeline, e
 	}
 
 	return pipelines, nil
+}
+
+func (c *GitLabClient) CreateMergeRequest(namespace string, payload map[string]interface{}) (*MergeRequest, error) {
+	endpoint := fmt.Sprintf("projects/%s/merge_requests", url.PathEscape(namespace))
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := c.newRequest("POST", endpoint, bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.httpClient().Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("GitLab API error (%d): %s", resp.StatusCode, string(body))
+	}
+
+	var mr MergeRequest
+	if err := json.NewDecoder(resp.Body).Decode(&mr); err != nil {
+		return nil, err
+	}
+
+	return &mr, nil
 }
 
 func (c *GitLabClient) GetMergeRequests(namespace, sourceBranch string) ([]MergeRequest, error) {
