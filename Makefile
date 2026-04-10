@@ -9,7 +9,7 @@ dev:
 	@GOOS=linux GOARCH=arm64 go build -o $(BINARY_PATH)
 # 	Link dev version
 	@echo "Linking DEV version..."
-	@sudo ln -sf $(PWD)/$(BINARY_PATH) /usr/local/bin/fns-cli
+	@sudo ln -sf $(PWD)/$(BINARY_PATH) /home/vscode/.local/bin/fns-cli
 	@sudo ln -sf $(PWD)/config.json $(APP_DIR)/config.json
 	@$(MAKE) --no-print-directory completion
 	@$(BINARY_PATH) version

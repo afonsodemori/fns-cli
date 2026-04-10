@@ -1,47 +1,121 @@
-<p align="center">
-  <img alt="logo: fns-cli" src="https://fns-cli.afonso.dev/assets/logo-banner-transparent.png">
-</p>
+# fns-cli
 
-`fns-cli` is a Go-based CLI tool designed to assist with daily developer tasks, specifically focusing on integrations with **Jira** and **GitLab**. It provides a command-line interface for managing issues, pipelines, and git-related workflows.
+A CLI to streamline your daily developer workflow with Jira and GitLab integrations.
 
-> [!NOTE]
-> **Work in Progress:** This project is currently being migrated from a legacy version that I developed and use. While the command structures are visible, the underlying implementations are still under development.
+## Features
 
-Learn more: https://fns-cli.afonso.dev
-
----
-
-## Main Technologies
-
-- **Go**: Primary programming language (version 1.25.7+).
-- **Cobra**: CLI framework for defining commands and flags.
-- **Lipgloss**: UI styling library for terminal output.
-- **Git**: Direct interaction with local git repositories via shell commands.
-
-## Architecture
-
-- `main.go`: Entry point that executes the root command.
-- `cmd/`: Contains the CLI command definitions using Cobra.
-  - `root.go`: Root command and subcommand registration.
-  - `git/`: Git-specific commands (branch, commit, mr, pipelines).
-  - `jira/`: Jira-specific commands (issue, assign, link, transition).
-- `internal/`: Core business logic and helpers.
-  - `config/`: Handles configuration loading from `$HOME/.fns-cli/config.json`.
-  - `git/`: Git-related utilities (e.g., getting current branch).
-  - `ui/`: UI helper functions and centralized error handling using Lipgloss.
-
----
+- Auto-infers Jira issue keys from git branch names (e.g. `PROJECT-1234-my-feature`)
+- Auto-infers GitLab project namespace from the git remote URL
+- Interactive terminal UI for selections and confirmations
+- Self-update support
 
 ## Installation
 
-```sh
-curl -fsSL https://fns-cli.afonso.dev/install.sh | sh
+### Homebrew (macOS / Linux)
+
+```bash
+brew install afonsodemori/tap/fns-cli
 ```
 
-or
+### Package managers (deb / rpm / apk)
 
-```sh
-go install github.com/afonsodemori/fns-cli@latest
+Download the appropriate package from the [releases page](https://github.com/afonsodemori/fns-cli/releases).
+
+## Configuration
+
+Create `~/.fns-cli/config.json`:
+
+```json
+{
+  "jira": {
+    "web_base_url": "https://your-org.atlassian.net",
+    "api_base_url": "https://your-org.atlassian.net/rest/api/3",
+    "email": "you@example.com",
+    "token": "your-jira-api-token",
+    "default_project_key": "PROJECT"
+  },
+  "gitlab": {
+    "api_base_url": "https://gitlab.com/api/v4",
+    "user_id": 12345,
+    "token": "your-gitlab-personal-access-token"
+  },
+  "extras": [
+    {
+      "type": "gist",
+      "id": "your-gist-id",
+      "token": "your-github-token"
+    }
+  ]
+}
 ```
 
-Configuration instructions at https://fns-cli.afonso.dev/guide/getting-started.html
+## Commands
+
+Most commands accept an optional `[issue-key]` argument. If omitted, the issue key is inferred from the current git branch name (e.g. branch `PROJ-42-my-feature` → issue key `PROJ-42`).
+
+### `jira`
+
+```bash
+# Show issue details
+fns-cli jira issue [issue-key]
+fns-cli jira issue [issue-key] --short   # basic info only
+
+# Transition issue to a new status (interactive)
+fns-cli jira transition [issue-key]
+
+# Assign issue to a user (interactive)
+fns-cli jira assign [issue-key]
+
+# Print the issue URL
+fns-cli jira link [issue-key]
+```
+
+### `git`
+
+```bash
+# List local branches with their GitLab merge request state
+fns-cli git branch
+
+# Commit staged changes — auto-prefixes the commit message with the issue key
+# and appends a Jira issue reference link
+fns-cli git commit <message>
+
+# Show or create a merge request for the current branch (alias: mr)
+fns-cli git merge-request
+fns-cli git mr
+
+# Show recent pipelines for the current branch
+fns-cli git pipelines
+```
+
+### `config`
+
+```bash
+# Download extra shell scripts from a configured GitHub Gist
+fns-cli config import-extras
+```
+
+### `version` / `update`
+
+```bash
+fns-cli version           # print version info
+fns-cli version --check   # also check for a newer release
+fns-cli update            # self-update to the latest release
+```
+
+## Development
+
+```bash
+# Build dev binary for linux/arm64 and symlink to /usr/local/bin/fns-cli
+make dev
+
+# Build snapshot with GoReleaser
+make build-snapshot
+
+# Start mock API on port 3000
+make mock-api
+```
+
+## License
+
+[MIT](LICENSE)

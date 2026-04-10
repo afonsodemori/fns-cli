@@ -4,3 +4,4 @@ bin/fns-cli*
 config.json
 # Added by goreleaser init:
 dist/
+docs
