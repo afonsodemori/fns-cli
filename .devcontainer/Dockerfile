@@ -1,4 +1,4 @@
-FROM ghcr.io/afonsodemori/devcontainers/golang:1.26
+FROM ghcr.io/afonsodemori/devcontainers/golang:1.26-20260416-064128
 
 USER root
 RUN apt-get update \
